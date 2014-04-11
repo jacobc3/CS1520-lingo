@@ -3,125 +3,100 @@
 <html>
 <head>
 <title>Lingo the game</title>
-</head>
-<body>
-	<p id="demo"></p>
-	<p id="return"></p>
-	<input type='button' id='addcookie' value='Add New Cookie' />
-	<input type='button' id='delcookie' value='Delete Cookie' />
-	<table id="firstTable" class="tableClass" border="1">
-		<tr>
-			<td>This is row 0</td>
-			<td>This is row 0</td>
-		</tr>
-		<tr>
-			<td>This is row 1</td>
-			<td>This is row 0</td>
-		</tr>
-		<tr>
-			<td>This is row 2</td>
-			<td>This is row 0</td>
-		</tr>
-		<tr>
-			<td>This is row 3</td>
-			<td>This is row 0</td>
-		</tr>
-		<tr>
-			<td>This is row 4</td>
-			<td>This is row 0</td>
-		</tr>
-		<tr>
-			<td>This is row 5</td>
-			<td>This is row 0</td>
-		</tr>
-		<tr>
-			<td>This is row 6</td>
-			<td>This is row 0</td>
-		</tr>
-	</table>
-</body>
-<script src="http://code.jquery.com/jquery-latest.js"></script>
-<script src="jquery.cookie.js"></script>
 <script type="text/javascript">
-	// CS 1520 Spring 2014
-	// Simple demo of creating and deleting cookies on the client side
-	// Note that we are using a JQuery plug-in to make this access easier.  JQuery
-	// plug-ins are simply aggregations of JQuery code that add yet another level
-	// of abstraction to our programming.  Obviously, the plug-in requires JQuery,
-	// so be sure to include JQuery before including the plug-in.
 
-	// For the plug-in source see: https://github.com/carhartl/jquery-cookie
+var word_list;
+var total_count;
+var win_count;
+var username;
+var played_list;
+    function onLoad() { 
+    	//
+        // check that storage is supported
+        if (typeof(Storage) !== "undefined") {
+            if (localStorage.username) {
+                // note that values still must be stored as strings
+                word_list = JSON.parse(localStorage.word_list);
+                played_list = JSON.parse(localStorage.played_list);
+                win_count = JSON.parse(localStorage.win_count);
+                username = JSON.parse(localStorage.username);
+                total_count = JSON.parse(localStorage.total_count);
+                
+                document.getElementById("welcome").innerHTML="welcome user "+username;
+                document.getElementById("game_status").innerHTML="Game Status</br>Total Play:"+total_count+"</br>Win Count:"+win_count+"</br>Word List "
+                +word_list.toString()+"</br>Played:"+ played_list.toString();
+                startGame();
+            } else {
+            	username = prompt("What's your name?");
+            	//document.write("<p> Paragraph here</p>");
+            	document.getElementById("welcome").innerHTML="welcome user "+username;
+            	win_count = 0;
+            	total_count = 0;
+            	played_list = [];
+            	word_list = getWordsFromServer();             	
+            	document.getElementById("game_status").innerHTML="Game Status</br>Total Play:"+total_count+"</br>Win Count:"+win_count+"</br>Word List "
+            	+word_list.toString()+"</br>Played:"+ played_list.toString();
+            	startGame();
+            }
+        }
+        localStorage.word_list = JSON.stringify(word_list);
+        localStorage.username = JSON.stringify(username);
+        localStorage.win_count = JSON.stringify(win_count);
+        localStorage.total_count = JSON.stringify(total_count);
+        localStorage.played_list = JSON.stringify(played_list);
+    }
+    function getWordsFromServer(){
+    	var words = ['aaaa','bbbbb','ccccc','ddddd','eeeee'];
+    	return words;
+    }
 
-	// This simple script is setting a cookie with one button and then deleting it with
-	// another (note deletion is simply done by setting the "expires" attribute to -1).
-	// This particular cookie is the one used by previous handout usesession.php.  Try
-	// it to see how we can manipulate cookies that are utilized by the server on the
-	// client side.  Note that this has interesting implications for any web server that
-	// is using cookies.
+    function startGame(){
+    	while(total_count < 5){ //0~4
+    		
+    	}
+    	
+    }
+    // prompt the user for a new value, add it to the localStorage and add it to the list
+    function add() {
+        var response = prompt("What is something fun to do?");
 
-	
-	var person = "";
-	$(document).ready(function() {
-	if($.cookie('username') != null){
-		document.getElementById("return").innerHTML = "returning user";
-		person = $.cookie('username');		
-	} else {
-		document.getElementById("return").innerHTML = "new user";
-		person = prompt("Please enter your name", "Harry Potter");
-		//person = "Harry Potter";
-		$.cookie('username',$person);
-	}
-	
-	if (person != null) {
-		x = "Hello New User " + person + "!";
-		document.getElementById("demo").innerHTML = x;
-	}
-		
-		
-		/*
-		$("#addcookie").click(function() {
-			// set the cookie to expire 1 day from now
-			$.cookie('zany[name]', 'Herbert', {
-				expires : 1
-			});
-			// set the cookie to expire 1 year from now
-			//$.cookie('zany[name]', 'Herbert', { expires: 365 }); 
-			$.cookie('zany[street]', 'Herb Alley', {
-				expires : 1
-			});
-			$.cookie('zany[city]', 'Herbopolis', {
-				expires : 1
-			});
-			$.cookie('zany[state]', 'Herbevania', {
-				expires : 1
-			});
-			$.cookie('zany[zip]', '12345', {
-				expires : 1
-			});
-			alert('Cookie should be added');
-			alert($.cookie('zany[name]'));
-			alert($.cookie('DOES_NOT_EXIST'));
-		});
+        if (typeof(Storage) !== "undefined") {
+            var data_list;
+            if (localStorage.data_list) {
+                data_list = JSON.parse(localStorage.data_list);
+                data_list.push(response);
+            }
+            else {
+                data_list = new Array(response);
+            }
 
-		$("#delcookie").click(function() {
-			$.cookie('zany[name]', 'Herbert', {
-				expires : -1
-			});
-			$.cookie('zany[street]', 'Herb Alley', {
-				expires : -1
-			});
-			$.cookie('zany[city]', 'Herbopolis', {
-				expires : -1
-			});
-			$.cookie('zany[state]', 'Herbevania', {
-				expires : -1
-			});
-			$.cookie('zany[zip]', '12345', {
-				expires : -1
-			});
-			alert('Cookie should be deleted');
-		});*/
-		
-	});
+            localStorage.data_list = JSON.stringify(data_list);
+        }
+
+        // add the response to the ordered list
+        var ord_list = document.getElementById("theList");
+        var list_item = document.createElement("li");
+        list_item.appendChild(document.createTextNode(response));
+        ord_list.appendChild(list_item);
+    }
+    
+    function erase(){    	
+    	localStorage.clear();
+    	document.getElementById("game_status").innerHTML="Erased</br>";
+    }
+
 </script>
+</head>
+<body onload="onLoad()">
+<h1>Your list of fun things to do:</h1>
+<ol id="theList">
+</ol>
+<p id = "welcome"></p>
+<p id = "game_status"></p>
+<input type='button' value='Add to the list' onClick='add()'/>
+<input type='button' value='Erase local storage' onClick='erase()'/>
+<?php 
+
+?>
+</body>
 </html>
