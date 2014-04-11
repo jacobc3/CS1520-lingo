@@ -8,24 +8,24 @@ You must submit an information sheet with every assignment.  Also be sure
 to submit all materials following the procedures described on the
 submission procedures page.
 
-Name:
+Name: Shuwen Zhou
 
-Recitation day and time:
+Recitation day and time: Mon 10am
 
-Assignment #:
+Assignment #:3
 
-Program due date:
+Program due date: 19 Apr
 
-Handed in date:
+Handed in date: 19 Apr
 
-The URL you developed your program from
+The URL you developed your program from :http://www.cs1520.cs.pitt.edu/~shz58/lingo/
 (i.e., www.cs1520.cs.pitt.edu:~id/project_name/):
 
 
 
 Source code file name(s):
 
-
+index.html
 
 
 
@@ -39,7 +39,7 @@ Other file name(s) (if relevant):
 
 
 
-Does your program run without error?:
+Does your program run without error?: no 
 
 If not, what is/are the error(s) and which parts of your program run
 correctly?:

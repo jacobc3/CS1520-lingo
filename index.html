@@ -2,59 +2,126 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Using Cookies in JQuery</title>
+<title>Lingo the game</title>
+</head>
+<body>
+	<p id="demo"></p>
+	<p id="return"></p>
+	<input type='button' id='addcookie' value='Add New Cookie' />
+	<input type='button' id='delcookie' value='Delete Cookie' />
+	<table id="firstTable" class="tableClass" border="1">
+		<tr>
+			<td>This is row 0</td>
+			<td>This is row 0</td>
+		</tr>
+		<tr>
+			<td>This is row 1</td>
+			<td>This is row 0</td>
+		</tr>
+		<tr>
+			<td>This is row 2</td>
+			<td>This is row 0</td>
+		</tr>
+		<tr>
+			<td>This is row 3</td>
+			<td>This is row 0</td>
+		</tr>
+		<tr>
+			<td>This is row 4</td>
+			<td>This is row 0</td>
+		</tr>
+		<tr>
+			<td>This is row 5</td>
+			<td>This is row 0</td>
+		</tr>
+		<tr>
+			<td>This is row 6</td>
+			<td>This is row 0</td>
+		</tr>
+	</table>
+</body>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script src="jquery.cookie.js"></script>
 <script type="text/javascript">
-    // CS 1520 Spring 2014
-    // Simple demo of creating and deleting cookies on the client side
-    // Note that we are using a JQuery plug-in to make this access easier.  JQuery
-    // plug-ins are simply aggregations of JQuery code that add yet another level
-    // of abstraction to our programming.  Obviously, the plug-in requires JQuery,
-    // so be sure to include JQuery before including the plug-in.
-    
-    // For the plug-in source see: https://github.com/carhartl/jquery-cookie
-    
-    // This simple script is setting a cookie with one button and then deleting it with
-    // another (note deletion is simply done by setting the "expires" attribute to -1).
-    // This particular cookie is the one used by previous handout usesession.php.  Try
-    // it to see how we can manipulate cookies that are utilized by the server on the
-    // client side.  Note that this has interesting implications for any web server that
-    // is using cookies.
-    $(document).ready(function() {
-    
-       $("#addcookie").click(function()
-       {
-          // set the cookie to expire 1 day from now
-          $.cookie('zany[name]', 'Herbert', { expires: 1 }); 
-          // set the cookie to expire 1 year from now
-          //$.cookie('zany[name]', 'Herbert', { expires: 365 }); 
-          $.cookie('zany[street]', 'Herb Alley', { expires: 1 }); 
-          $.cookie('zany[city]', 'Herbopolis', { expires: 1 }); 
-          $.cookie('zany[state]', 'Herbevania', { expires: 1 });
-          $.cookie('zany[zip]', '12345', { expires: 1 }); 
-          alert('Cookie should be added');
-          alert($.cookie('zany[name]'));
-          alert($.cookie('DOES_NOT_EXIST'));
-      }
-       );
-       
-       $("#delcookie").click(function()
-       {
-          $.cookie('zany[name]', 'Herbert', { expires: -1 }); 
-          $.cookie('zany[street]', 'Herb Alley', { expires: -1 }); 
-          $.cookie('zany[city]', 'Herbopolis', { expires: -1 }); 
-          $.cookie('zany[state]', 'Herbevania', { expires: -1 });
-          $.cookie('zany[zip]', '12345', { expires: -1 }); 
-          alert('Cookie should be deleted');
-       }
-       );
-    });
-    
+	// CS 1520 Spring 2014
+	// Simple demo of creating and deleting cookies on the client side
+	// Note that we are using a JQuery plug-in to make this access easier.  JQuery
+	// plug-ins are simply aggregations of JQuery code that add yet another level
+	// of abstraction to our programming.  Obviously, the plug-in requires JQuery,
+	// so be sure to include JQuery before including the plug-in.
+
+	// For the plug-in source see: https://github.com/carhartl/jquery-cookie
+
+	// This simple script is setting a cookie with one button and then deleting it with
+	// another (note deletion is simply done by setting the "expires" attribute to -1).
+	// This particular cookie is the one used by previous handout usesession.php.  Try
+	// it to see how we can manipulate cookies that are utilized by the server on the
+	// client side.  Note that this has interesting implications for any web server that
+	// is using cookies.
+
+	
+	var person = "";
+	$(document).ready(function() {
+	if($.cookie('username') != null){
+		document.getElementById("return").innerHTML = "returning user";
+		person = $.cookie('username');		
+	} else {
+		document.getElementById("return").innerHTML = "new user";
+		person = prompt("Please enter your name", "Harry Potter");
+		//person = "Harry Potter";
+		$.cookie('username',$person);
+	}
+	
+	if (person != null) {
+		x = "Hello New User " + person + "!";
+		document.getElementById("demo").innerHTML = x;
+	}
+		
+		
+		/*
+		$("#addcookie").click(function() {
+			// set the cookie to expire 1 day from now
+			$.cookie('zany[name]', 'Herbert', {
+				expires : 1
+			});
+			// set the cookie to expire 1 year from now
+			//$.cookie('zany[name]', 'Herbert', { expires: 365 }); 
+			$.cookie('zany[street]', 'Herb Alley', {
+				expires : 1
+			});
+			$.cookie('zany[city]', 'Herbopolis', {
+				expires : 1
+			});
+			$.cookie('zany[state]', 'Herbevania', {
+				expires : 1
+			});
+			$.cookie('zany[zip]', '12345', {
+				expires : 1
+			});
+			alert('Cookie should be added');
+			alert($.cookie('zany[name]'));
+			alert($.cookie('DOES_NOT_EXIST'));
+		});
+
+		$("#delcookie").click(function() {
+			$.cookie('zany[name]', 'Herbert', {
+				expires : -1
+			});
+			$.cookie('zany[street]', 'Herb Alley', {
+				expires : -1
+			});
+			$.cookie('zany[city]', 'Herbopolis', {
+				expires : -1
+			});
+			$.cookie('zany[state]', 'Herbevania', {
+				expires : -1
+			});
+			$.cookie('zany[zip]', '12345', {
+				expires : -1
+			});
+			alert('Cookie should be deleted');
+		});*/
+		
+	});
 </script>
-</head>
-<body>
-<input type='button' id='addcookie' value='Add New Cookie'/>
-<input type='button' id='delcookie' value='Delete Cookie'</>
-</body>
 </html>
