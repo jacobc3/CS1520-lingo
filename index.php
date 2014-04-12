@@ -88,15 +88,42 @@ var played_list;
 </script>
 </head>
 <body onload="onLoad()">
-<h1>Your list of fun things to do:</h1>
-<ol id="theList">
-</ol>
-<p id = "welcome"></p>
-<p id = "game_status"></p>
-<input type='button' value='Add to the list' onClick='add()'/>
-<input type='button' value='Erase local storage' onClick='erase()'/>
-<?php 
-
-?>
+	<h1>Your list of fun things to do:</h1>
+	<ol id="theList"></ol>
+	<p id="welcome"></p>
+	<p id="game_status"></p>
+	<input type='button' value='Add to the list' onClick='add()' />
+	<input type='button' value='Erase local storage' onClick='erase()' />
+	<?php 
+	/*
+	 <tr>
+	<td>data1</td>
+	<td name="tcol1" class="bold"> data2</td>
+	</tr>
+	<tr>
+	<td>data1</td>
+	<td name="tcol1" class="bold"> data2</td>
+	</tr>
+	<tr>
+	<td>data1</td>
+	<td name="tcol1" class="bold"> data2</td>
+	</tr>
+	*/
+	echo '
+<table>
+  <tr>
+    <td>Customer Name</td>
+    <td>', $var1, '</td>
+  </tr>
+  <tr>
+    <td>Customer Age</td>
+    <td>', $var2, '</td>
+  </tr>
+  <tr>
+    <td>Customer ...</td>
+    <td>', $var3, '</td>
+  </tr>
+</table>';
+	?>
 </body>
 </html>
