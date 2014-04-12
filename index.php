@@ -38,6 +38,8 @@ var played_list;
             	+word_list.toString()+"</br>Played:"+ played_list.toString();
             	startGame();
             }
+        } else {
+        	document.getElementById("welcome").innerHTML="OMG WHAT BROWSER YOU USING? ";
         }
         localStorage.word_list = JSON.stringify(word_list);
         localStorage.username = JSON.stringify(username);
@@ -52,32 +54,11 @@ var played_list;
 
     function startGame(){
     	while(total_count < 5){ //0~4
-    		
+    		document.getElementById("game_status").innerHTML="Game Status</br>Total Play:"+total_count+"</br>Win Count:"+win_count+"</br>Word List "
+        	+word_list.toString()+"</br>Played:"+ played_list.toString();
+        	startGame();
+    		total_count++;
     	}
-    	
-    }
-    // prompt the user for a new value, add it to the localStorage and add it to the list
-    function add() {
-        var response = prompt("What is something fun to do?");
-
-        if (typeof(Storage) !== "undefined") {
-            var data_list;
-            if (localStorage.data_list) {
-                data_list = JSON.parse(localStorage.data_list);
-                data_list.push(response);
-            }
-            else {
-                data_list = new Array(response);
-            }
-
-            localStorage.data_list = JSON.stringify(data_list);
-        }
-
-        // add the response to the ordered list
-        var ord_list = document.getElementById("theList");
-        var list_item = document.createElement("li");
-        list_item.appendChild(document.createTextNode(response));
-        ord_list.appendChild(list_item);
     }
     
     function erase(){    	
@@ -92,38 +73,7 @@ var played_list;
 	<ol id="theList"></ol>
 	<p id="welcome"></p>
 	<p id="game_status"></p>
-	<input type='button' value='Add to the list' onClick='add()' />
+	
 	<input type='button' value='Erase local storage' onClick='erase()' />
-	<?php 
-	/*
-	 <tr>
-	<td>data1</td>
-	<td name="tcol1" class="bold"> data2</td>
-	</tr>
-	<tr>
-	<td>data1</td>
-	<td name="tcol1" class="bold"> data2</td>
-	</tr>
-	<tr>
-	<td>data1</td>
-	<td name="tcol1" class="bold"> data2</td>
-	</tr>
-	*/
-	echo '
-<table>
-  <tr>
-    <td>Customer Name</td>
-    <td>', $var1, '</td>
-  </tr>
-  <tr>
-    <td>Customer Age</td>
-    <td>', $var2, '</td>
-  </tr>
-  <tr>
-    <td>Customer ...</td>
-    <td>', $var3, '</td>
-  </tr>
-</table>';
-	?>
 </body>
 </html>
