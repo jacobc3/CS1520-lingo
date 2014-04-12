@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,6 +9,7 @@ var total_count;
 var win_count;
 var username;
 var played_list;
+
     function onLoad() { 
     	//
         // check that storage is supported
@@ -39,7 +39,7 @@ var played_list;
             	startGame();
             }
         } else {
-        	document.getElementById("welcome").innerHTML="OMG WHAT BROWSER YOU USING? ";
+        	document.getElementById("welcome").innerHTML= "OMG WHAT BROWSER YOU USING? </br>";
         }
         localStorage.word_list = JSON.stringify(word_list);
         localStorage.username = JSON.stringify(username);
@@ -47,18 +47,23 @@ var played_list;
         localStorage.total_count = JSON.stringify(total_count);
         localStorage.played_list = JSON.stringify(played_list);
     }
+    
     function getWordsFromServer(){
-    	var words = ['aaaa','bbbbb','ccccc','ddddd','eeeee'];
+    	var words = ['absde','bawef','cwefw','dwwwd','eeeee'];
     	return words;
     }
 
     function startGame(){
-    	while(total_count < 5){ //0~4
-    		document.getElementById("game_status").innerHTML="Game Status</br>Total Play:"+total_count+"</br>Win Count:"+win_count+"</br>Word List "
-        	+word_list.toString()+"</br>Played:"+ played_list.toString();
-        	startGame();
-    		total_count++;
-    	}
+        while(total_count < 5){
+	        var maximum = word_list.length - 1;
+	        var minimum = 0;
+	    	var random_number = Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
+	    	this_word = word_list[random_number];
+	    	document.getElementById("this_word").innerHTML = "This word is: "+this_word+"</br>";
+	    	document.getElementById("game_status").innerHTML="Game Status</br>Total Play:"+total_count+"</br>Win Count:"+win_count+"</br>Word List "
+	        +word_list.toString()+"</br>Played:"+ played_list.toString();
+	        total_count++;
+        }
     }
     
     function erase(){    	
@@ -73,7 +78,15 @@ var played_list;
 	<ol id="theList"></ol>
 	<p id="welcome"></p>
 	<p id="game_status"></p>
-	
+	<p id="this_word">This word:</p>
 	<input type='button' value='Erase local storage' onClick='erase()' />
+	<p>
+	<?php 
+	echo '<table id = "table" border="1">';
+	echo '<td>';
+	echo '<tr>~~~~~~~~~~~</tr>';
+	echo '</td>';
+	echo '</table>';
+	?>
 </body>
 </html>
