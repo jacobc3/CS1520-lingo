@@ -2,15 +2,18 @@
 <html>
 <head>
 <title>Lingo the game</title>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
 <script type="text/javascript">
-
-var word_list;
+var word_list = new Array();
 var total_count;
 var win_count;
 var username;
-var played_list;
-var max_play = 100;
+var played_list = new Array();
+var max_play = 5;
 var game_finished = false;
+var starting_number = -1;
+
+
     function onLoad() { 
     	//
         // check that storage is supported
@@ -23,7 +26,7 @@ var game_finished = false;
                 username = JSON.parse(localStorage.username);
                 total_count = JSON.parse(localStorage.total_count);
                 
-                document.getElementById("welcome").innerHTML="welcome user "+username;
+                document.getElementById("welcome").innerHTML="Welcome user "+username;
                 document.getElementById("game_status").innerHTML="Game Status</br>Total Play:"+total_count+"</br>Win Count:"+win_count+"</br>Word List "
                 +word_list.toString()+"</br>Played:"+ played_list.toString();
                 startGame();
@@ -32,9 +35,10 @@ var game_finished = false;
             	//document.write("<p> Paragraph here</p>");
             	document.getElementById("welcome").innerHTML="welcome user "+username;
             	win_count = 0;
-            	total_count = 0;
+            	total_count = starting_number;
             	played_list = [];
-            	word_list = getWordsFromServer();             	
+            	//word_list = getWordsFromServer(); 
+            	getWordsFromServer();    	
             	document.getElementById("game_status").innerHTML="Game Status</br>Total Play:"+total_count+"</br>Win Count:"+win_count+"</br>Word List "
             	+word_list.toString()+"</br>Played:"+ played_list.toString();
             	startGame();
@@ -42,31 +46,95 @@ var game_finished = false;
         } else {
         	document.getElementById("welcome").innerHTML= "OMG WHAT BROWSER YOU USING? </br>";
         }
-        localStorage.word_list = JSON.stringify(word_list);
-        localStorage.username = JSON.stringify(username);
-        localStorage.win_count = JSON.stringify(win_count);
-        localStorage.total_count = JSON.stringify(total_count);
-        localStorage.played_list = JSON.stringify(played_list);
+        if(!game_finished){
+	        localStorage.word_list = JSON.stringify(word_list);
+	        localStorage.username = JSON.stringify(username);
+	        localStorage.win_count = JSON.stringify(win_count);
+	        localStorage.total_count = JSON.stringify(total_count);
+	        localStorage.played_list = JSON.stringify(played_list);
+        }
     }
     
-    function getWordsFromServer(){
-    	var words = ['absde','bawef','cwefw','dwwwd','edfes'];
-    	return words;
+    var httpRequest;
+    function getWordsFromServer(){    	
+        if (window.XMLHttpRequest) { // Mozilla, Safari, ...
+            httpRequest = new XMLHttpRequest();
+            if (httpRequest.overrideMimeType) {
+                httpRequest.overrideMimeType('text/xml');
+            }
+        }
+        else if (window.ActiveXObject) { // IE
+            try {
+                httpRequest = new ActiveXObject("Msxml2.XMLHTTP");
+                }
+            catch (e) {
+                try {
+                    httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                catch (e) {}
+            }
+        }
+        if (!httpRequest) {
+            alert('Giving up :( Cannot create an XMLHTTP instance');
+            return false;
+        }
+    	//xmlhttp.open("GET","cd_catalog.xml",false);
+    	httpRequest.onreadystatechange=stateChanged;
+        httpRequest.open('GET', 'getWord.php', true);
+        httpRequest.setRequestHeader('Content-Type', 'text/xml');
+        httpRequest.send();
+    	//var words = ['absde','bawef','cwefw','dwwwd','edfes'];
+    	//return word_list;
     }
-
+    
+	function stateChanged() { 
+		if (httpRequest.readyState==4 || httpRequest.readyState=="complete"){ 
+     	document.getElementById("welcome").innerHTML = httpRequest.responseText;
+     	//alert(httpRequest.responseText);
+     	var root = httpRequest.responseXML.documentElement;
+	       // Get the setup and punchline through their XML tags
+	       //word_list = new Array();
+			for(var i = 0; i<5;i++){
+				var setup = root.getElementsByTagName('Word')[i].childNodes[0].nodeValue;
+		       	//alert(setup);
+				word_list.push(setup);			       	
+			}
+			//alert(word_list.toString());
+			localStorage.word_list = JSON.stringify(word_list);
+			
+			location.reload();
+	       
+     	}
+		
+    }
+var word;
     function getNewWord(){
+       // var word;
     	var maximum = word_list.length - 1;
         var minimum = 0;
     	var random_number = Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
-    	return word_list[random_number];
+    	word =  word_list[random_number];
+    	if(played_list.indexOf(word) > -1){ //contains
+        	//alert("duplcated "+word);
+        	word = getNewWord();
+    	}
+        return word;
+    	
     }
+
+    
     function startGame(){
-        if(total_count < 5){
+        if(total_count < max_play){
         	total_count++;
 	    	this_word = getNewWord();
 	    	document.getElementById("this_word").innerHTML = "This word is: "+this_word+"</br>";
 	    	document.getElementById("game_status").innerHTML="Game Status</br>Total Play:"+total_count+"</br>Win Count:"+win_count+"</br>Word List "
 	        +word_list.toString()+"</br>Played:"+ played_list.toString();
+	        if(this_word){
+		    	document.getElementById('input00').value = this_word.charAt(0).toUpperCase();
+		    	document.getElementById('input00').readOnly = true;
+		    	document.getElementById('input10').focus();
+	        }
         } else {
             //game finished!
             game_finished = true;
@@ -81,19 +149,26 @@ var game_finished = false;
     }
     
     function erase(){   
-    	total_count = 0;
+    	total_count = starting_number;
 	    win_count = 0;
 	    username = "";
 	    word_list = "";
-	    player_list = "";
+	    played_list = "";
+	    localStorage.removeItem('word_list');
+	    localStorage.removeItem('username');
+	    localStorage.removeItem('win_count');
+	    localStorage.removeItem('total_count');
+	    localStorage.removeItem('played_list');
     	localStorage.clear();
+    	window.localStorage.clear();
     	document.getElementById("game_status").innerHTML="Erased</br>";
-    	location.reload();
+    	//location.reload();
+    	window.setTimeout(function(){location.reload()},1000);
     }
 
 </script>
 
-<!-- <script src="http://code.jquery.com/jquery-latest.js"></script> -->
+
 <SCRIPT language=javascript id=clientEventHandlersJS>
 	function endingColumnKeyup(placement) {
 		var game_win = true;
@@ -200,39 +275,41 @@ var game_finished = false;
 </script>
 </head>
 <body onload="onLoad()">
-	<h1>Your list of fun things to do:</h1>
 	<ol id="theList"></ol>
-	<h1><p id="welcome"></p></h1>
-	>>><p id="game_status"></p>
-	<p id="this_word">This word:</p>
-	<p id="my_log">LOG</p>
+	<h1>
+	----<p id="welcome"></p>----
+	</h1>
+	>>>
+	<p hidden>hidden?</p>
+	<p id="game_status" hidden></p>
+	<p id="this_word" >This word:</p>
+	<p id="my_log" hidden>LOG</p>
 	<input type='button' value='Erase local storage' onClick='erase()' />
-	<p>
-	>>></p>
-		<?php 
-		echo '<table id = "table" border="1" width="600px">'."\n";
-		echo "\t".'<tr>'."\n";
-		$i = 0;
-		$j = 0;
-		echo "\t"."\t".'<td>'.$i.' '.$j."\n";//"'.$i.$j.'"
-		echo "\t"."\t"."\t".'<input maxLength=1 size=1 id=input'.$i.$j.'>'."\n";
+	<p>>>></p>
+	<?php 
+	echo '<table id = "table" border="1" width="300px">'."\n";
+	echo "\t".'<tr>'."\n";
+	$i = 0;
+	$j = 0;
+	echo "\t"."\t".'<td>'."\n";//"'.$i.$j.'"
+	echo "\t"."\t"."\t".'<input maxLength=1 size=1 id=input'.$i.$j.'>'."\n";
+	echo "\t"."\t".'</td>'."\n";
+	for($j = 1; $j<5; $j++){
+		echo "\t"."\t".'<td>'."\n";//"'.$i.$j.'"
 		echo "\t"."\t".'</td>'."\n";
-		for($j = 1; $j<5; $j++){
-			echo "\t"."\t".'<td>'.$i.' '.$j."\n";//"'.$i.$j.'"
-			echo "\t"."\t".'</td>'."\n";
-		}
-		echo "\t".'</tr>'."\n";
-		for($i = 1; $i<6; $i++){
+	}
+	echo "\t".'</tr>'."\n";
+	for($i = 1; $i<6; $i++){
 		echo "\t".'<tr>'."\n";
 		for($j = 0; $j<5; $j++){
 			if($j!=4){
-				echo "\t"."\t".'<td>'.$i.' '.$j."\n";//"'.$i.$j.'"
+				echo "\t"."\t".'<td>'."\n";//"'.$i.$j.'"
 				echo "\t"."\t"."\t".'<input language=javascript onKeyUp="return columnKeyup(\''.$i.$j.'\')" maxLength=1 size=1 id=input'.$i.$j.'>'."\n";
 				//<INPUT language=javascript onkeyup="return T1_onkeyup()"
 				//				maxLength=4 size=4 name=T1>
 				echo "\t"."\t".'</td>'."\n";
 			} else {
-				echo "\t"."\t".'<td>'.$i.' '.$j."\n";//"'.$i.$j.'"
+				echo "\t"."\t".'<td>'."\n";//"'.$i.$j.'"
 				echo "\t"."\t"."\t".'<input language=javascript onKeyUp="return endingColumnKeyup(\''.$i.$j.'\')" maxLength=1 size=1 id=input'.$i.$j.'>'."\n";
 				//<INPUT language=javascript onkeyup="return T1_onkeyup()"
 				//				maxLength=4 size=4 name=T1>
@@ -250,9 +327,6 @@ var game_finished = false;
 
 </body>
 <script type="text/javascript">
-	document.getElementById("my_log").innerHTML = "running last line";
-	document.getElementById('input00').value = "W";
-	document.getElementById('input00').readOnly=true;
-	document.getElementById('input10').focus();
+document.getElementById("my_log").innerHTML = "running last line";
 </script>
 </html>
