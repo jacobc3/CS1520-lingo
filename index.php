@@ -2,6 +2,54 @@
 <html>
 <head>
 <title>Lingo the game</title>
+<STYLE type=text/css>
+BODY {
+	MARGIN-TOP: 100px;
+	FONT-SIZE: 14pt;
+	MARGIN-LEFT: 100px;
+	MARGIN-RIGHT: 100px;
+	text-align: center;
+	font-weight: bold;
+}
+
+h1 {
+	font-size: 30px;
+	font-weight: bold;
+	color: #CC00CC;
+}
+
+input {
+	font-size: 24px;
+	font-weight: bold;
+}
+
+.STYLE2 {
+	font-size: 40px;
+	color: #330066;
+}
+
+table {
+	/*border: 1px solid;*/
+	width: 200px;
+	text-align: center;
+	horizontal-align: center;
+	margin: 10px auto;
+	border-collapse: collapse;
+	border: 1px solid gray;
+}
+
+td {
+	text-align: center; /* center checkbox horizontally */
+	vertical-align: middle; /* center checkbox vertically */
+	/* border:1px;*/
+}
+
+tr {
+	/* border:1px;*/
+	
+}
+</STYLE>
+
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script type="text/javascript">
 var word_list = new Array();
@@ -26,9 +74,11 @@ var starting_number = -1;
                 username = JSON.parse(localStorage.username);
                 total_count = JSON.parse(localStorage.total_count);
                 
-                document.getElementById("welcome").innerHTML="Welcome user "+username;
+                document.getElementById("welcome").innerHTML="Welcome user "+username.toLocaleUpperCase()+" To LINGO!";
                 document.getElementById("game_status").innerHTML="Game Status</br>Total Play:"+total_count+"</br>Win Count:"+win_count+"</br>Word List "
                 +word_list.toString()+"</br>Played:"+ played_list.toString();
+                
+                document.getElementById("visible_game_status").innerHTML="Game Status</br>Total Play:"+total_count+"</br>Win Count:"+win_count+"</br>";
                 startGame();
             } else {
             	username = prompt("What's your name?");
@@ -41,6 +91,8 @@ var starting_number = -1;
             	getWordsFromServer();    	
             	document.getElementById("game_status").innerHTML="Game Status</br>Total Play:"+total_count+"</br>Win Count:"+win_count+"</br>Word List "
             	+word_list.toString()+"</br>Played:"+ played_list.toString();
+            	document.getElementById("visible_game_status").innerHTML="Game Status</br>Total Play:"+total_count+"</br>Win Count:"+win_count+"</br>";
+                
             	startGame();
             }
         } else {
@@ -130,6 +182,8 @@ var word;
 	    	document.getElementById("this_word").innerHTML = "This word is: "+this_word+"</br>";
 	    	document.getElementById("game_status").innerHTML="Game Status</br>Total Play:"+total_count+"</br>Win Count:"+win_count+"</br>Word List "
 	        +word_list.toString()+"</br>Played:"+ played_list.toString();
+	    	document.getElementById("visible_game_status").innerHTML="Game Status</br>Total Play:"+total_count+"</br>Win Count:"+win_count+"</br>";
+            
 	        if(this_word){
 		    	document.getElementById('input00').value = this_word.charAt(0).toUpperCase();
 		    	document.getElementById('input00').readOnly = true;
@@ -277,21 +331,24 @@ var word;
 <body onload="onLoad()">
 	<ol id="theList"></ol>
 	<h1>
-	----<p id="welcome"></p>----
+		<p id="welcome"></p>
 	</h1>
-	>>>
+
+	</br>
 	<p hidden>hidden?</p>
 	<p id="game_status" hidden></p>
-	<p id="this_word" >This word:</p>
+	<p id="visible_game_status"></p>
+	<p id="this_word" hidden>This word:</p>
 	<p id="my_log" hidden>LOG</p>
 	<input type='button' value='Erase local storage' onClick='erase()' />
-	<p>>>></p>
+	</br>
+	</br>
 	<?php 
-	echo '<table id = "table" border="1" width="300px">'."\n";
+	echo '<table id = "table">'."\n";
 	echo "\t".'<tr>'."\n";
 	$i = 0;
 	$j = 0;
-	echo "\t"."\t".'<td>'."\n";//"'.$i.$j.'"
+	echo "\t"."\t".'<td >'."\n";//"'.$i.$j.'"
 	echo "\t"."\t"."\t".'<input maxLength=1 size=1 id=input'.$i.$j.'>'."\n";
 	echo "\t"."\t".'</td>'."\n";
 	for($j = 1; $j<5; $j++){

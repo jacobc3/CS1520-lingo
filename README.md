@@ -16,7 +16,7 @@ Assignment #:3
 
 Program due date: 19 Apr
 
-Handed in date: 19 Apr
+Handed in date: 15 Apr
 
 The URL you developed your program from :http://www.cs1520.cs.pitt.edu/~shz58/lingo/
 (i.e., www.cs1520.cs.pitt.edu:~id/project_name/):
@@ -25,8 +25,8 @@ The URL you developed your program from :http://www.cs1520.cs.pitt.edu/~shz58/li
 
 Source code file name(s):
 
-index.html
-
+index.php
+getWord.php
 
 
 
@@ -51,7 +51,7 @@ correctly?:
 
 
 Additional comments to the grader:
-
+Thank you :)
 
 
 
