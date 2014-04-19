@@ -338,7 +338,7 @@ var word;
 	<p hidden>hidden?</p>
 	<p id="game_status" hidden></p>
 	<p id="visible_game_status"></p>
-	<p id="this_word" hidden>This word:</p>
+	<p id="this_word">This word:</p>
 	<p id="my_log" hidden>LOG</p>
 	<input type='button' value='Erase local storage' onClick='erase()' />
 	</br>
